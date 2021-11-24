@@ -1,0 +1,7 @@
+numpy
+opencv-python-headless
+streamlit==1.1.0
+streamlit-webrtc==0.31.1
+av==8.0.3
+typing_extensions==3.10.0.2
+mediapipe==0.8.8.1
