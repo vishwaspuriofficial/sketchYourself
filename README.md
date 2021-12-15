@@ -1,6 +1,6 @@
 # sketchYourself
 
-A program which uses your live webcam to process your image with different filters like cartoon, edges, colored and more...
+A program that uses your live webcam to process your image with different filters like cartoon, edges, coloured and more...
 
 This program is made using python supported by streamlit.
 
