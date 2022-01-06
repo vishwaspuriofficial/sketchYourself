@@ -1,0 +1,31 @@
+Colored Pixels:
+image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        hgt, wdt, _ = image.shape
+        # Sobel Edges
+        x_sobel = cv2.Sobel(image, cv2.CV_64F, 0, 1, ksize=5)
+        y_sobel = cv2.Sobel(image, cv2.CV_64F, 1, 0, ksize=5)
+        sobel_or = cv2.bitwise_or(x_sobel, y_sobel)
+        img = sobel_or
+
+
+GrayScale:
+img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+HSV:
+img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+Pencil Sketch (Gray)
+img, sk_color = cv2.pencilSketch(img, sigma_s=60, sigma_r=0.07, shade_factor=0.1)
+
+Pencil Sketch (Color)
+sk_gray, img = cv2.pencilSketch(img, sigma_s=60, sigma_r=0.07, shade_factor=0.1)
+
+Invert
+img = cv2.bitwise_not(img)
+
+Blurred:
+cv2.blur(img, (20,20))
+
+Invert, Pencil Sketch (Color), HSV, Edges, Cartoon
+
+Pencil Sketch (Gray), 

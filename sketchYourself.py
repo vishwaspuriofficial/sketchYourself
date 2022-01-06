@@ -19,8 +19,7 @@ RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
 
-st.write("Press start to turn on Camera and select the type of sketch from the dropdown")
-st.write("If camera dosen't turn on, click the select device button and change the camera input!")
+st.write("Press start to turn on camera and select the type of filter from the dropdown!")
 def sketchYourself():
     class OpenCVVideoProcessor(VideoProcessorBase):
         type: Literal["null", "Cartoon", "Edges"]
@@ -35,13 +34,11 @@ def sketchYourself():
                 pass
 
             elif self.type == "Cartoon":
-                # prepare color
                 img_color = cv2.pyrDown(cv2.pyrDown(img))
                 for _ in range(6):
                     img_color = cv2.bilateralFilter(img_color, 9, 9, 7)
                 img_color = cv2.pyrUp(cv2.pyrUp(img_color))
 
-                # prepare edges
                 img_edges = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
                 img_edges = cv2.adaptiveThreshold(
                     cv2.medianBlur(img_edges, 7),
@@ -59,9 +56,28 @@ def sketchYourself():
                 # perform edge detection
                 img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
 
-            elif self.type == "Colored":
-                # convert to RGB
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            elif self.type == "Green-Effect":
+                img = cv2.cvtColor(img,cv2.COLOR_BGR2HLS)
+
+            elif self.type == "Blue-Effect":
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+
+            elif self.type == "Red-Effect":
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+            elif self.type == "Blurred":
+                img = cv2.blur(img, (20,20))
+
+            elif self.type == "Light":
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2XYZ)
+
+            elif self.type == "Pencil Sketch (Color)":
+                sk_gray, img = cv2.pencilSketch(img, sigma_s=60, sigma_r=0.07, shade_factor=0.1)
+
+            elif self.type == "Invert":
+                img = cv2.bitwise_not(img)
+
+
 
 
 
@@ -83,10 +99,15 @@ def sketchYourself():
 
     if webrtc_ctx.video_processor:
         webrtc_ctx.video_processor.type = st.selectbox(
-            "", ("Select Sketch Type", "Cartoon", "Edges","Colored")
+            "", ("Select Sketch Type", "Cartoon", "Edges","Green-Effect","Blue-Effect", "Red-Effect", "Blurred", "Pencil Sketch (Color)", "Invert","Light")
         )
 
-
+    # Info Block
+    st.write("If camera doesn't turn on, please ensure that your camera permissions are on!")
+    with st.expander("Steps to enable permission"):
+        st.write("1. Click the lock button at the top left of the page")
+        st.write("2. Slide the camera slider to on")
+        st.write("3. Reload your page!")
 
 
 if __name__ == "__main__":
