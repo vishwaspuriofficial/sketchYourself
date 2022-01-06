@@ -71,10 +71,10 @@ def sketchYourself():
             elif self.type == "Light":
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2XYZ)
 
-            elif self.type == "Pencil Sketch (Color)":
+            elif self.type == "Pencil Sketch":
                 sk_gray, img = cv2.pencilSketch(img, sigma_s=60, sigma_r=0.07, shade_factor=0.1)
 
-            elif self.type == "Invert":
+            elif self.type == "Dark":
                 img = cv2.bitwise_not(img)
 
 
@@ -99,7 +99,7 @@ def sketchYourself():
 
     if webrtc_ctx.video_processor:
         webrtc_ctx.video_processor.type = st.selectbox(
-            "", ("Select Sketch Type", "Cartoon", "Edges","Green-Effect","Blue-Effect", "Red-Effect", "Blurred", "Pencil Sketch (Color)", "Invert","Light")
+            "", ("Select Sketch Type", "Cartoon", "Edges","Green-Effect","Blue-Effect", "Red-Effect", "Blurred", "Pencil Sketch", "Dark","Light")
         )
 
     # Info Block
