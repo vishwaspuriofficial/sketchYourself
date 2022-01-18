@@ -1,6 +1,11 @@
+#Title: SketchYourself
+#Developer: Vishwas Puri
+#Purpose: A program that uses your live webcam to process your image with different filters like cartoon, edges, coloured and more...
+
+#This program is made using python supported by streamlit.
+
 import streamlit as st
 import cv2
-import numpy as np
 from streamlit_webrtc import (
     AudioProcessorBase,
     RTCConfiguration,
@@ -34,6 +39,7 @@ def sketchYourself():
                 pass
 
             elif self.type == "Cartoon":
+                #converting image to cartoon using multiple filters
                 img_color = cv2.pyrDown(cv2.pyrDown(img))
                 for _ in range(6):
                     img_color = cv2.bilateralFilter(img_color, 9, 9, 7)
@@ -57,32 +63,36 @@ def sketchYourself():
                 img = cv2.cvtColor(cv2.Canny(img, 100, 200), cv2.COLOR_GRAY2BGR)
 
             elif self.type == "Green-Effect":
+                #converting image to HLS Filter
                 img = cv2.cvtColor(img,cv2.COLOR_BGR2HLS)
 
             elif self.type == "Blue-Effect":
+                #converting image to LAB Filter
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
 
             elif self.type == "Red-Effect":
+                #converting image to HSV Filter
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
             elif self.type == "Blurred":
+                #blurring image
                 img = cv2.blur(img, (20,20))
 
             elif self.type == "Light":
+                #converting image to XYZ Filter
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2XYZ)
 
             elif self.type == "Pencil Sketch":
+                #convert image to a colered pencil sketch filter
                 sk_gray, img = cv2.pencilSketch(img, sigma_s=60, sigma_r=0.07, shade_factor=0.1)
 
             elif self.type == "Dark":
+                #converting to no-bits image
                 img = cv2.bitwise_not(img)
-
-
-
-
 
             return av.VideoFrame.from_ndarray(img, format="bgr24")
 
+    # setting up streamlit camera configuration
     webrtc_ctx = webrtc_streamer(
         key="opencv-filter",
         mode=WebRtcMode.SENDRECV,
@@ -97,6 +107,7 @@ def sketchYourself():
         },
     )
 
+    #dropdown of options of filters
     if webrtc_ctx.video_processor:
         webrtc_ctx.video_processor.type = st.selectbox(
             "", ("Select Sketch Type", "Cartoon", "Edges","Green-Effect","Blue-Effect", "Red-Effect", "Blurred", "Pencil Sketch", "Dark","Light")
